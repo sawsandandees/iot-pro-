@@ -2,9 +2,12 @@ import express, { json } from 'express'
 import IotApi from '@arduino/arduino-iot-client';
 import rp from 'request-promise';
 import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config()
 
 const PORT = process.env.PORT || 5000;
 const app = express();
+
 app.use(json())
 app.use(cors())
 
@@ -40,7 +43,7 @@ async function run() {
 
   // variables API
   var api = new IotApi.PropertiesV2Api(client);
-  
+
   // thing id -> test
   api.propertiesV2List('9e25f54c-2c6e-404e-9081-6585edab3230').then(properties => {
     result = properties.map(prop => {

@@ -15,6 +15,7 @@
     "@arduino/arduino-iot-client": "^2.0.0",
     "arduino-iot-js": "^0.11.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "nodemon": "^3.1.0",
     "request-promise": "^4.2.6"
