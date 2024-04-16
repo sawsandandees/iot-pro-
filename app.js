@@ -55,10 +55,13 @@ async function run() {
   });
 }
 
-run();
-
 app.get('/', (req, res) => {
-  res.send(result).end();
+  try {
+    run();
+    res.send(result).end();
+  } catch (error) {
+    res.status(500).send("Server Error").end()
+  }
 });
 
 app.listen(PORT, () => {
