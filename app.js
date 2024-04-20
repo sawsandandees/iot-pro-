@@ -55,7 +55,7 @@ async function run() {
   });
 }
 
-app.get('/', (req, res) => {
+app.get('/get-data', (req, res) => {
   try {
     run();
     res.send(result).end();
