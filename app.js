@@ -11,7 +11,7 @@ const app = express();
 app.use(json())
 app.use(cors())
 
-async function getToken() {
+async function getToken(c_id, c_sec) {
   var options = {
     method: 'POST',
     url: 'https://api2.arduino.cc/iot/v1/clients/token',
@@ -19,8 +19,8 @@ async function getToken() {
     json: true,
     form: {
       grant_type: 'client_credentials',
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
+      client_id: c_id,
+      client_secret: c_sec,
       audience: 'https://api2.arduino.cc/iot'
     }
   };
@@ -39,7 +39,9 @@ let result = [];
 async function run() {
   var client = IotApi.ApiClient.instance;
   var oauth2 = client.authentications['oauth2'];
-  oauth2.accessToken = await getToken();
+  const client_id = process.env.CLIENT_ID;
+  const client_secret = process.env.CLIENT_SECRET;
+  oauth2.accessToken = await getToken(client_id, client_secret);
 
   // variables API
   var api = new IotApi.PropertiesV2Api(client);
@@ -54,6 +56,16 @@ async function run() {
     console.log(error)
   });
 }
+
+app.post('/auth', async (req, res) => {
+  const { client_id, client_secret } = req.body;
+  const token = await getToken(client_id, client_secret);
+  if (!token) {
+    res.status(401).end();
+  } else {
+    res.status(200).end()
+  }
+})
 
 app.get('/get-data', (req, res) => {
   try {
