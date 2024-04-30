@@ -3,6 +3,7 @@ import IotApi from '@arduino/arduino-iot-client';
 import rp from 'request-promise';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { sendEmail } from './email-service.js';
 dotenv.config()
 
 const PORT = process.env.PORT || 5000;
@@ -65,6 +66,11 @@ app.post('/auth', async (req, res) => {
   } else {
     res.status(200).end()
   }
+})
+
+app.post('/notification', (req, res) => {
+  const { email } = req.body;
+  sendEmail(email);
 })
 
 app.get('/get-data', (req, res) => {
